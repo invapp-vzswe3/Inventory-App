@@ -26,10 +26,14 @@ function App() {
 
   return (
     <>
-      <h1>Inventory App</h1>
+      <h1 className = "title">Inventory App</h1>
       {!singleItem ? (
         items.map(item => (
-          <button key={item.id} onClick={() => singleItemView(item.id)}>{item.name} ${item.price} {item.description} {item.category} {item.image} </button>
+          <div onClick={() => singleItemView(item.id)} className = "items" key = {item.id}>
+            <h2>{item.name}</h2>
+            <img className = "itemimage" src = {item.image} alt={item.name} width="20%" height="20%"/> 
+            <h3 className = "price">Price: ${item.price}</h3>
+          </div>
         ))
       ) : (
         <div>
@@ -37,7 +41,7 @@ function App() {
           <p>Price: ${singleItem.price}</p>
           <p>Description: {singleItem.description}</p>
           <p>Category: {singleItem.category}</p>
-          <img src={singleItem.image} alt={singleItem.name} />
+          <img className = "singleitemimage" src={singleItem.image} alt={singleItem.name} width="20%" height= "20%" />
           <br />
           <button onClick={() => setSingleItem(null)}>Back to Items</button>
         </div>
