@@ -8,7 +8,7 @@ function App() {
 
   useEffect(() => {
     const fetchItems = async () => {
-    const response = await fetch('/items');
+    const response = await fetch(`${apiURL}/items`); // Fetch items from the API
     const data = await response.json();
     console.log(items)
     setItems(data);
