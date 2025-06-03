@@ -17,4 +17,14 @@ router.get("/:id", async (req, res) => {
     }
 })
 
+// GET /items
+router.get('/', async (req, res, next) => {
+  try {
+    const items = await Item.findAll()
+    res.send(items)
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = router;
