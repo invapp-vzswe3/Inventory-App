@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ItemForm from "./ItemForm";
 
 // Prepend the API URL to any fetch calls.
 import apiURL from "../api";
@@ -6,6 +7,7 @@ import apiURL from "../api";
 function App() {
   const [items, setItems] = useState([]);
   const [singleItem, setSingleItem] = useState(null);
+  const [form, toggleForm] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [searchItems, setSearchItems] = useState("");
 
@@ -15,7 +17,6 @@ function App() {
         `${apiURL}/items${searchItems ? `?name=${encodeURIComponent(searchItems)}` : ""}`
       );
       const data = await response.json();
-      console.log(items)
       setItems(data);
     };
   fetchItems();// Fetch the items
@@ -71,6 +72,11 @@ function App() {
           <p>Category: {singleItem.category}</p>
           <img className = "singleitemimage" src={singleItem.image} alt={singleItem.name} width="20%" height= "20%" />
           <br />
+          <button onClick={() => setSingleItem(null)}>Back to Items</button>
+          <button onClick={() => toggleForm(!form)}>Update Item</button>
+          {form && (
+            <ItemForm singleItem={singleItem} setSingleItem={setSingleItem}/>
+          )}
           <button onClick={goBackToItems}>Back to Items</button>
           <button onClick={() => deleteItem(singleItem.id)}className = "deletebutton">Delete</button>
         </div>
