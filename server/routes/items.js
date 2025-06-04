@@ -32,6 +32,17 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+// POST /items
+router.post('/', async (req, res, next) => {
+  try {
+    const { name, price, description, category, image } = req.body;
+    const newItem = await Item.create({ name, price, description, category, image });
+    res.status(201).json(newItem); 
+  } catch (error) {
+    next(error);
+  }
+});
+
 // UPDATE Item
 router.put("/:id", async (req, res, next) => {
   try {
