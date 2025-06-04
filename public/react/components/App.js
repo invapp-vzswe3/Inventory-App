@@ -25,6 +25,12 @@ function App() {
     setSingleItem(data);
   }
 
+  const goBackToItems = () => {
+    setSingleItem(null);
+    setRefresh(!refresh); 
+    console.log(refresh);
+  }
+
   const deleteItem = async (id) => {
     await fetch(`${apiURL}/items/${id}`, {
       method: "DELETE",
@@ -53,7 +59,7 @@ function App() {
           <p>Category: {singleItem.category}</p>
           <img className = "singleitemimage" src={singleItem.image} alt={singleItem.name} width="20%" height= "20%" />
           <br />
-          <button onClick={() => setSingleItem(null)}>Back to Items</button>
+          <button onClick={goBackToItems}>Back to Items</button>
           <button onClick={() => deleteItem(singleItem.id)}className = "deletebutton">Delete</button>
         </div>
       )}
