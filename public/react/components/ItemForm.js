@@ -1,30 +1,36 @@
 import React, { useState } from "react";
+import apiURL from "../api";
 
-export default function ItemForm( {singleItem} ) {
+export default function ItemForm({ singleItem, setSingleItem }) {
 
     const [formData, setFormData] = useState({
         name: "",
         description: "",
         price: 0,
         category: "",
-        image: "",
-
     })  
 
     async function handleSubmit(e) {
         e.preventDefault();
             
-        try {   
-            //Fetch Update Database
-            // setSingleItem(data);
-            // setFormData({
-            //     name: "",
-            //     description: "",
-            //     price: 0,
-            //     category: "",
-            //     image: "",
+        try {
+            const response = await fetch(`${apiURL}/items/${singleItem.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
 
-            // }) 
+                },
+                body: JSON.stringify({...singleItem, ...formData}),
+
+            })
+            const data = await response.json();
+            setSingleItem(data);
+            setFormData({
+                name: "",
+                description: "",
+                price: 0,
+                category: "",
+            }) 
         } catch(err) {
             throw new Error(err);
         }
@@ -37,7 +43,7 @@ export default function ItemForm( {singleItem} ) {
                 <input type="text" placeholder="Description" value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})}/><br />
                 <input type="number" placeholder="Price" value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})}/><br />
                 <input type="text" placeholder="Category" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})}/><br />
-                <input type="text" placeholder="Image Url" value={formData.image} onChange={(e) => setFormData({...formData, image: e.target.value})}/><br />
+                <button type="submit">Submit</button>
             </form>
         </>
     )

@@ -13,7 +13,6 @@ function App() {
     const fetchItems = async () => {
       const response = await fetch(`${apiURL}/items`); // Fetch items from the API
       const data = await response.json();
-      console.log(items)
       setItems(data);
     };
   fetchItems();// Fetch the items
@@ -48,7 +47,7 @@ function App() {
           <button onClick={() => setSingleItem(null)}>Back to Items</button>
           <button onClick={() => toggleForm(!form)}>Update Item</button>
           {form && (
-            <ItemForm singleItem={singleItem}/>
+            <ItemForm singleItem={singleItem} setSingleItem={setSingleItem}/>
           )}
         </div>
       )}
