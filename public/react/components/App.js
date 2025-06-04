@@ -52,11 +52,11 @@ function App() {
         const response = await fetch(`${apiURL}/items`);
         setItems(await response.json());
       }}>
-        <input name="name" placeholder="Name"/>
-        <input name="description" placeholder="Description" />
-        <input name="price" placeholder="Price"/>
-        <input name="category" placeholder="Category" />
-        <input name="image" placeholder="Image URL" />
+        <input name="name" placeholder="Name"/> <br />
+        <input name="description" placeholder="Description" /> <br />
+        <input name="price" placeholder="Price"/> <br />
+        <input name="category" placeholder="Category" /> <br />
+        <input name="image" placeholder="Image URL" /> <br />
         <button type="submit">Add Item</button>
         <button type="button" onClick={() => setIsAddingProduct(false)}>Cancel</button>
       </form>
