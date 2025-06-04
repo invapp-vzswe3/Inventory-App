@@ -7,22 +7,30 @@ function App() {
   const [items, setItems] = useState([]);
   const [singleItem, setSingleItem] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  const [searchItems, setSearchItems] = useState("");
 
   useEffect(() => {
     const fetchItems = async () => {
-      const response = await fetch(`${apiURL}/items`); // Fetch items from the API
+      const response = await fetch(
+        `${apiURL}/items${searchItems ? `?name=${encodeURIComponent(searchItems)}` : ""}`
+      );
       const data = await response.json();
       console.log(items)
       setItems(data);
     };
   fetchItems();// Fetch the items
-  }, [refresh]);
+  }, [refresh, searchItems]);
 
 
   const singleItemView = async (id) => {
     const response = await fetch(`${apiURL}/items/${id}`); // Fetch a single item by ID
     const data = await response.json();
     setSingleItem(data);
+  }
+
+  const handleSearch = (e) => {
+    setSearchItems(e.target.value);
+    setRefresh(!refresh); // Trigger a refresh to apply the search filter
   }
 
   const goBackToItems = () => {
@@ -43,6 +51,10 @@ function App() {
   return (
     <>
       <h1 className = "title">Inventory App</h1>
+      <div>
+        <input onChange={handleSearch}  ></input>
+        
+      </div>
       {!singleItem ? (
         items.map(item => (
           <div onClick={() => singleItemView(item.id)} className = "items" key = {item.id}>
