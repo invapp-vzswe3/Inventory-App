@@ -27,4 +27,27 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+// UPDATE Item
+router.put("/:id", async (req, res, next) => {
+  try {
+    const foundItem = await Item.findByPk(req.params.id);
+    if (!foundItem) {
+      res.status(400).json({ error: `Item not found ID: ${req.params.id}`});
+    } else {
+      const updatedItem = await foundItem.update({
+        name: req.body.name,
+        description: req.body.description,
+        price: req.body.price,
+        category: req.body.category,
+        image: req.body.image,
+
+      });
+      
+      res.status(200).json(updatedItem);
+    }
+  } catch(err) {
+    next(err);
+  }
+})
+
 module.exports = router;
