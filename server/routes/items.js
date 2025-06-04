@@ -1,5 +1,6 @@
 const express = require("express");
 const { Item } = require("../models");
+const { Op } = require("sequelize");
 
 const router = express.Router();
 router.use(express.json());
@@ -20,7 +21,11 @@ router.get("/:id", async (req, res) => {
 // GET /items
 router.get('/', async (req, res, next) => {
   try {
-    const items = await Item.findAll()
+    let where = {};
+    if (req.query.name) {
+      where.name = { [Op.like]: `%${req.query.name}%` };
+    }
+    const items = await Item.findAll({ where: Object.keys(where).length ? where : undefined });
     res.send(items)
   } catch (error) {
     next(error)
@@ -36,6 +41,26 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+// UPDATE Item
+router.put("/:id", async (req, res, next) => {
+  try {
+    const foundItem = await Item.findByPk(req.params.id);
+    if (!foundItem) {
+      res.status(400).json({ error: `Item not found ID: ${req.params.id}`});
+    } else {
+      const updatedItem = await foundItem.update({
+        name: req.body.name,
+        description: req.body.description,
+        price: req.body.price,
+        category: req.body.category,
+        image: req.body.image,
+
+      });
+      console.log(updatedItem);
+      res.status(200).json(updatedItem);
+    }
+  } catch(err) {
+    next(err);
 
 // DELETE /items/:id
 router.delete('/:id', async (req, res, next) => {
