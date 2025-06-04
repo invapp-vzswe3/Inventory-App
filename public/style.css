@@ -14,3 +14,39 @@ body {
 img {
   max-width: 100%;
 }
+
+.title {
+  color: gray;
+  display: flex;
+  justify-content: center;
+}
+
+.itembuttons {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin-bottom: 6px;
+}
+
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  margin-bottom: 1em;
+  border: black solid 1px; 
+}
+
+.itemimage {
+  margin-bottom: 8px;
+}
+
+.price {
+  color: red
+}
+
+.singleitemimage {
+  display: flex;
+  justify-content: center;
+}
