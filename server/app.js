@@ -1,30 +1,32 @@
-// load environment variables from .env or elsewhere
+// Load environment variables from .env
 require("dotenv").config();
 
-const cors = require("cors");
 const express = require("express");
+const cors = require("cors");
 const morgan = require("morgan");
 const path = require("path");
 
 const app = express();
 
-// Allow CORS
+// ========== Middleware Setup ========== //
+
+// Enable Cross-Origin Resource Sharing
 app.use(cors());
 
-// logging middleware
+// Logging HTTP requests
 app.use(morgan("dev"));
 
-// parsing middleware for form input data & json
+// Parse URL-encoded data and JSON
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// serve up static files (e.g. html and css files)
-app.use(express.static(path.join(__dirname, "../dist")));
+// Serve static files from the frontend build (optional adjustment)
+app.use(express.static(path.join(__dirname, "../public")));
 
-// api router
-app.use("/api", require("./routes"));
+// ========== Routes ========== //
+app.use("/api", require("./routes")); // All API routes under /api
 
-// 404 handler
+// ========== 404 Not Found Handler ========== //
 app.use((req, res) => {
   res.status(404).send({
     error: "404 - Not Found",
@@ -32,10 +34,11 @@ app.use((req, res) => {
   });
 });
 
-// error handling middleware
+// ========== Error Handling Middleware ========== //
 app.use((error, req, res, next) => {
   console.error("SERVER ERROR: ", error);
 
+  // Ensure response has appropriate status
   if (res.statusCode < 400) {
     res.status(500);
   }
@@ -44,7 +47,7 @@ app.use((error, req, res, next) => {
     error: error.message,
     name: error.name,
     message: error.message,
-    table: error.table,
+    ...(error.table && { table: error.table }),
   });
 });
 
