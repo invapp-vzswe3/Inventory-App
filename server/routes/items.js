@@ -27,4 +27,20 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+
+// DELETE /items/:id
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const item = await Item.destroy({
+      where: { id: req.params.id }
+    })
+    if (!item) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+    res.status(200).json({ message: "Item deleted successfully" });
+  } catch (error) {
+      return res.status(500).json({ error: "Server Error" });
+  }
+})
+
 module.exports = router;

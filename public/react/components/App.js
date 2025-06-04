@@ -6,6 +6,7 @@ import apiURL from "../api";
 function App() {
   const [items, setItems] = useState([]);
   const [singleItem, setSingleItem] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -15,13 +16,22 @@ function App() {
       setItems(data);
     };
   fetchItems();// Fetch the items
-  }, []);
+  }, [refresh]);
 
 
   const singleItemView = async (id) => {
     const response = await fetch(`${apiURL}/items/${id}`); // Fetch a single item by ID
     const data = await response.json();
     setSingleItem(data);
+  }
+
+  const deleteItem = async (id) => {
+    await fetch(`${apiURL}/items/${id}`, {
+      method: "DELETE",
+    });
+    console.log(`Item with ID ${id} deleted`);
+    setSingleItem(null);
+    setRefresh(!refresh);  
   }
 
   return (
@@ -44,6 +54,7 @@ function App() {
           <img className = "singleitemimage" src={singleItem.image} alt={singleItem.name} width="20%" height= "20%" />
           <br />
           <button onClick={() => setSingleItem(null)}>Back to Items</button>
+          <button onClick={() => deleteItem(singleItem.id)}className = "deletebutton">Delete</button>
         </div>
       )}
   </>
