@@ -6,6 +6,7 @@ import apiURL from "../api";
 function App() {
   const [items, setItems] = useState([]);
   const [singleItem, setSingleItem] = useState(null);
+  const [form, toggleForm] = useState(false);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -44,6 +45,10 @@ function App() {
           <img className = "singleitemimage" src={singleItem.image} alt={singleItem.name} width="20%" height= "20%" />
           <br />
           <button onClick={() => setSingleItem(null)}>Back to Items</button>
+          <button onClick={() => toggleForm(!form)}>Update Item</button>
+          {form && (
+            <h1>Form is toggled</h1>
+          )}
         </div>
       )}
   </>
