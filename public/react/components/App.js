@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ItemForm from "./ItemForm";
 
 // Prepend the API URL to any fetch calls.
 import apiURL from "../api";
@@ -47,7 +48,7 @@ function App() {
           <button onClick={() => setSingleItem(null)}>Back to Items</button>
           <button onClick={() => toggleForm(!form)}>Update Item</button>
           {form && (
-            <h1>Form is toggled</h1>
+            <ItemForm singleItem={singleItem}/>
           )}
         </div>
       )}
