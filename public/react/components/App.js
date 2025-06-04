@@ -6,6 +6,8 @@ import apiURL from "../api";
 function App() {
   const [items, setItems] = useState([]);
   const [singleItem, setSingleItem] = useState(null);
+  const [isAddingProduct, setIsAddingProduct] = useState(false)
+  
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -23,25 +25,64 @@ function App() {
     const data = await response.json();
     setSingleItem(data);
   }
+  const handleCreationClick=()=>{
+    setIsAddingProduct(true)
+}
 
   return (
-    <>
-      <h1>Inventory App</h1>
-      {!singleItem ? (
-        items.map(item => (
-          <button key={item.id} onClick={() => singleItemView(item.id)}>{item.name} ${item.price} {item.description} {item.category} {item.image} </button>
-        ))
-      ) : (
-        <div>
-          <h2>{singleItem.name}</h2>
-          <p>Price: ${singleItem.price}</p>
-          <p>Description: {singleItem.description}</p>
-          <p>Category: {singleItem.category}</p>
-          <img src={singleItem.image} alt={singleItem.name} />
-          <br />
-          <button onClick={() => setSingleItem(null)}>Back to Items</button>
-        </div>
-      )}
+  <>
+    <h1>Inventory App</h1>
+
+    {isAddingProduct ? (
+      <form onSubmit={async (event) => {
+        event.preventDefault();
+        const productData = {
+          name: event.target.name.value,
+          description: event.target.description.value,
+          price: event.target.price.value,
+          category: event.target.category.value,
+          image: event.target.image.value,
+        };
+        await fetch(`${apiURL}/items`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(productData),
+        });
+        setIsAddingProduct(false);
+        const response = await fetch(`${apiURL}/items`);
+        setItems(await response.json());
+      }}>
+        <input name="name" placeholder="Name"/>
+        <input name="description" placeholder="Description" />
+        <input name="price" placeholder="Price"/>
+        <input name="category" placeholder="Category" />
+        <input name="image" placeholder="Image URL" />
+        <button type="submit">Add Item</button>
+        <button type="button" onClick={() => setIsAddingProduct(false)}>Cancel</button>
+      </form>
+    ) : singleItem ? (
+      <div>
+        <h2>{singleItem.name}</h2>
+        <p>Price: ${singleItem.price}</p>
+        <p>Description: {singleItem.description}</p>
+        <p>Category: {singleItem.category}</p>
+        <img src={singleItem.image} alt={singleItem.name} />
+        <br />
+        <button onClick={() => setSingleItem(null)}>Back to Items</button>
+      </div>
+    ) : (
+      <>
+        {items.map(item => (
+          <button key={item.id} onClick={() => singleItemView(item.id)}>
+          <b> Item:</b> {item.name} <b> Price:</b>${item.price} <b>Description:</b>{item.description} <b>Category:</b> {item.category} 
+          </button>
+          
+        ))}
+        <br />
+        <button onClick={handleCreationClick}>Add Item</button>
+        
+      </>
+    )}
   </>
 );
 }
