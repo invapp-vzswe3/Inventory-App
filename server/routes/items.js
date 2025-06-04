@@ -42,7 +42,7 @@ router.put("/:id", async (req, res, next) => {
         image: req.body.image,
 
       });
-      
+      console.log(updatedItem);
       res.status(200).json(updatedItem);
     }
   } catch(err) {
