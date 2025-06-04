@@ -1,5 +1,6 @@
 const express = require("express");
 const { Item } = require("../models");
+const { Op } = require("sequelize");
 
 const router = express.Router();
 router.use(express.json());
@@ -20,7 +21,11 @@ router.get("/:id", async (req, res) => {
 // GET /items
 router.get('/', async (req, res, next) => {
   try {
-    const items = await Item.findAll()
+    let where = {};
+    if (req.query.name) {
+      where.name = { [Op.like]: `%${req.query.name}%` };
+    }
+    const items = await Item.findAll({ where: Object.keys(where).length ? where : undefined });
     res.send(items)
   } catch (error) {
     next(error)
