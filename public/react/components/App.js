@@ -3,6 +3,7 @@ import ItemForm from "./ItemForm";
 import apiURL from "../api";
 import Item from "./Item";
 import SingleItem from "./SingleItem";
+import AddingProductForm from "./AddingProductForm";
 
 function App() {
   // State to store all items
@@ -75,40 +76,10 @@ function App() {
   };
 
   return (
-    <>
-      <h1 className="title">Inventory App</h1>
-
+  <>
+    <h1 className="title">Inventory App</h1>
     {isAddingProduct ? (
-      <form
-        onSubmit={async (event) => {
-          event.preventDefault();
-          const productData = {
-            name: event.target.name.value,
-            description: event.target.description.value,
-            price: event.target.price.value,
-            category: event.target.category.value,
-            image: event.target.image.value,
-          };
-          await fetch(`${apiURL}/items`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(productData),
-          });
-          setIsAddingProduct(false);
-          const response = await fetch(`${apiURL}/items`);
-          setItems(await response.json());
-        }}
-      >
-        <input name="name" placeholder="Name" /> <br />
-        <input name="description" placeholder="Description" /> <br />
-        <input name="price" placeholder="Price" /> <br />
-        <input name="category" placeholder="Category" /> <br />
-        <input name="image" placeholder="Image URL" /> <br />
-        <button type="submit">Add Item</button>
-        <button type="button" onClick={() => setIsAddingProduct(false)}>
-          Cancel
-        </button>
-      </form>
+      <AddingProductForm setIsAddingProduct={setIsAddingProduct} setItems={setItems}/>
     ) : !singleItem ? (
       <>
       <div>
