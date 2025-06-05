@@ -6,28 +6,28 @@ import SingleItem from "./SingleItem";
 import AddingProductForm from "./AddingProductForm";
 
 function App() {
-  // 📦 All available items
+  // State to store all items
   const [items, setItems] = useState([]);
 
-  // 🔍 Single selected item (for detailed view/editing)
+  // State to display one selected item
   const [singleItem, setSingleItem] = useState(null);
 
-  // 🔄 Toggles update form inside single item view
+  // Toggle to show update form
   const [form, toggleForm] = useState(false);
 
-  // 🔁 Used to trigger re-fetching items after an update/delete
+  // Used to re-fetch data on updates
   const [refresh, setRefresh] = useState(false);
 
-  // 🔎 Holds the user’s search input
+  // Holds the current search string
   const [searchItems, setSearchItems] = useState("");
 
-  // ➕ Controls if Add New Product form is visible
+  // Controls whether the item creation form is shown
   const [isAddingProduct, setIsAddingProduct] = useState(false);
 
-  // 🛒 Cart containing selected items and their quantity
+  // 🛒 Cart state to store selected items with quantity
   const [cart, setCart] = useState([]);
 
-  // 📥 Fetch items from backend (filtered if search is used)
+  // Fetch items from backend (with search if applied)
   useEffect(() => {
     const fetchItems = async () => {
       const response = await fetch(
@@ -39,123 +39,188 @@ function App() {
     fetchItems();
   }, [refresh, searchItems]);
 
-  // 🎯 Updates search term as user types
+  // Get single item by ID for detailed view
+  const singleItemView = async (id) => {
+    const response = await fetch(`${apiURL}/items/${id}`);
+    const data = await response.json();
+    setSingleItem(data);
+  };
+
+  // Update search input value
   const handleSearch = (e) => {
     setSearchItems(e.target.value);
   };
 
-  // ➕ Show the Add New Product form
+  // Reset view back to item list
+  const goBackToItems = () => {
+    setSingleItem(null);
+    setRefresh(!refresh);
+  };
+
+  // Delete selected item
+  const deleteItem = async (id) => {
+    await fetch(`${apiURL}/items/${id}`, {
+      method: "DELETE",
+    });
+    setSingleItem(null);
+    setRefresh(!refresh);
+  };
+
+  // Show product creation form
   const handleCreationClick = () => {
     setIsAddingProduct(true);
   };
 
-  // 🛒 Add item to cart (or increase quantity if it already exists)
+  // Add item to cart (increase quantity if already exists)
   const addToCart = (item) => {
     const exists = cart.find((i) => i.id === item.id);
     if (exists) {
-      // If item is already in cart, increase its quantity
       setCart(cart.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i));
     } else {
-      // If item is new to cart, add with quantity 1
       setCart([...cart, { ...item, quantity: 1 }]);
     }
   };
 
-  // ❌ Remove item from cart by its ID
+  // Remove item from cart by ID
   const removeFromCart = (itemId) => {
     setCart(cart.filter((item) => item.id !== itemId));
   };
 
-  // ✅ Checkout: send all cart items to backend and clear cart
+  // Simulate checkout: send cart data to backend and reset cart
   const checkout = async () => {
     for (const item of cart) {
       await fetch(`${apiURL}/cart`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: 1, // static for now — replace with real user ID later
+          userId: 1, // static for now; replace with real user auth later
           itemId: item.id,
           quantity: item.quantity,
         }),
       });
     }
     alert("Checkout complete!");
-    setCart([]); // Clear cart after checkout
+    setCart([]);
   };
 
   return (
     <>
-      {/* 🧾 App Title */}
       <h1 className="title">Inventory App</h1>
 
-      {/* 🛒 Shopping Cart Section */}
-      <div className="cart">
+      {/* 🛒 Cart Section */}
+      <div>
         <h2>🛒 Your Cart</h2>
         {cart.length === 0 ? (
           <p>Cart is empty</p>
         ) : (
           cart.map((item) => (
-            <div key={item.id} className="cart-item">
+            <div key={item.id}>
               {item.name} x {item.quantity}
-              {/* ❌ Remove from cart button */}
-              <button className="btn-red" onClick={() => removeFromCart(item.id)}>
-                Remove
-              </button>
+              <button onClick={() => removeFromCart(item.id)}>Remove</button>
             </div>
           ))
         )}
-        {/* ✅ Checkout Button */}
-        {cart.length > 0 && (
-          <button className="btn-green" onClick={checkout}>
-            Checkout
-          </button>
-        )}
+        {cart.length > 0 && <button onClick={checkout}>Checkout</button>}
       </div>
 
-      {/* ✏️ Adding New Item Form */}
+      {/* ➕ New Item Form */}
       {isAddingProduct ? (
-        <AddingProductForm
-          setIsAddingProduct={setIsAddingProduct}
-          setItems={setItems}
-        />
+        <form
+          onSubmit={async (event) => {
+            event.preventDefault();
+            const productData = {
+              name: event.target.name.value,
+              description: event.target.description.value,
+              price: event.target.price.value,
+              category: event.target.category.value,
+              image: event.target.image.value,
+            };
+            await fetch(`${apiURL}/items`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(productData),
+            });
+            setIsAddingProduct(false);
+            const response = await fetch(`${apiURL}/items`);
+            setItems(await response.json());
+          }}
+        >
+          <input name="name" placeholder="Name" /> <br />
+          <input name="description" placeholder="Description" /> <br />
+          <input name="price" placeholder="Price" /> <br />
+          <input name="category" placeholder="Category" /> <br />
+          <input name="image" placeholder="Image URL" /> <br />
+          <button type="submit">Add Item</button>
+          <button type="button" onClick={() => setIsAddingProduct(false)}>
+            Cancel
+          </button>
+        </form>
       ) : !singleItem ? (
         <>
-          {/* 🔎 Search Input */}
-          <div>
-            <input
-              value={searchItems}
-              onChange={handleSearch}
-              placeholder="Search by name..."
-            />
-          </div>
+          {/* 🔍 Search Input */}
+          <input
+            value={searchItems}
+            onChange={handleSearch}
+            placeholder="Search by name..."
+          />
 
-          {/* 🧱 Items Grid: List of all items */}
-          <div className="items-grid">
-            {items.map((item) => (
-              <Item
-                key={item.id}
-                item={item}
-                setSingleItem={setSingleItem}
-                addToCart={addToCart}
+          {/* 📦 List of Items */}
+          {items.map((item) => (
+            <div
+              onClick={() => singleItemView(item.id)}
+              className="items"
+              key={item.id}
+            >
+              <h2>{item.name}</h2>
+              <img
+                className="itemimage"
+                src={item.image}
+                alt={item.name}
+                width="20%"
+                height="20%"
               />
-            ))}
-          </div>
+              <h3 className="price">Price: ${item.price}</h3>
 
-          {/* ➕ Add New Item Button */}
-          <button className="btn-green" onClick={handleCreationClick}>
-            Add Item
-          </button>
+              {/* ➕ Add to Cart */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // avoid triggering item view
+                  addToCart(item);
+                }}
+              >
+                Add to Cart
+              </button>
+            </div>
+          ))}
+          <button onClick={handleCreationClick}>Add Item</button>
         </>
       ) : (
-        // 🔍 Single Item View with Edit/Delete options
-        <SingleItem
-          form={form}
-          singleItem={singleItem}
-          setSingleItem={setSingleItem}
-          refresh={refresh}
-          setRefresh={setRefresh}
-          toggleForm={toggleForm}
-        />
+        // 🔍 Single Item View with edit/delete options
+        <div>
+          <h2>{singleItem.name}</h2>
+          <p>Price: ${singleItem.price}</p>
+          <p>Description: {singleItem.description}</p>
+          <p>Category: {singleItem.category}</p>
+          <img
+            className="singleitemimage"
+            src={singleItem.image}
+            alt={singleItem.name}
+            width="20%"
+            height="20%"
+          />
+          <br />
+          <button onClick={() => toggleForm(!form)}>Update Item</button>
+          {form && (
+            <ItemForm singleItem={singleItem} setSingleItem={setSingleItem} />
+          )}
+          <button onClick={goBackToItems}>Back to Items</button>
+          <button
+            onClick={() => deleteItem(singleItem.id)}
+            className="deletebutton"
+          >
+            Delete
+          </button>
+        </div>
       )}
     </>
   );
