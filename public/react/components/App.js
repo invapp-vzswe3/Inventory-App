@@ -25,31 +25,9 @@ function App() {
   fetchItems();// Fetch the items
   }, [refresh, searchItems]);
 
-
-  const singleItemView = async (id) => {
-    const response = await fetch(`${apiURL}/items/${id}`); // Fetch a single item by ID
-    const data = await response.json();
-    setSingleItem(data);
-  }
-
   const handleSearch = (e) => {
     setSearchItems(e.target.value);
     setRefresh(!refresh); // Trigger a refresh to apply the search filter
-  }
-
-  const goBackToItems = () => {
-    setSingleItem(null);
-    setRefresh(!refresh); 
-    console.log(refresh);
-  }
-
-  const deleteItem = async (id) => {
-    await fetch(`${apiURL}/items/${id}`, {
-      method: "DELETE",
-    });
-    console.log(`Item with ID ${id} deleted`);
-    setSingleItem(null);
-    setRefresh(!refresh);  
   }
 
   const handleCreationClick = () => {
@@ -101,12 +79,12 @@ function App() {
         />
       </div>
         {items.map((item) => (
-          <Item key={item.id} item={item} singleItemView={singleItemView}/>
+          <Item key={item.id} item={item} setSingleItem={setSingleItem}/>
         ))}
         <button onClick={handleCreationClick}>Add Item</button>
       </>
     ) : (
-      <SingleItem form={form} singleItem={singleItem} setSingleItem={setSingleItem} toggleForm={toggleForm} goBackToItems={goBackToItems} deleteItem={deleteItem}/>
+      <SingleItem form={form} singleItem={singleItem} setSingleItem={setSingleItem} refresh={refresh} setRefresh={setRefresh} toggleForm={toggleForm}/>
     )}
   </>
 );
