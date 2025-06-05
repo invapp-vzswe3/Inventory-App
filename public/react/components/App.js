@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import ItemForm from "./ItemForm";
 import apiURL from "../api";
 import Item from "./Item";
-import SingleItem from "./SingleItem";
-import AddingProductForm from "./AddingProductForm";
 
 function App() {
   // State to store all items
@@ -109,16 +107,34 @@ function App() {
 
       {/* 🛒 Cart Section */}
       <div>
-        <h2>🛒 Your Cart</h2>
-        {cart.length === 0 ? (
-          <p>Cart is empty</p>
-        ) : (
-          cart.map((item) => (
-            <div key={item.id}>
-              {item.name} x {item.quantity}
-              <button onClick={() => removeFromCart(item.id)}>Remove</button>
-            </div>
-          ))
+        <input
+          value={searchItems}
+          onChange={handleSearch}
+          placeholder="Search by name..."
+        />
+      </div>
+        {items.map((item) => (
+          <Item key={item.id} item={item} singleItemView={singleItemView}/>
+        ))}
+        <button onClick={handleCreationClick}>Add Item</button>
+      </>
+    ) : (
+      <div>
+        <h2>{singleItem.name}</h2>
+        <p>Price: ${singleItem.price}</p>
+        <p>Description: {singleItem.description}</p>
+        <p>Category: {singleItem.category}</p>
+        <img
+          className="singleitemimage"
+          src={singleItem.image}
+          alt={singleItem.name}
+          width="20%"
+          height="20%"
+        />
+        <br />
+        <button onClick={() => toggleForm(!form)}>Update Item</button>
+        {form && (
+          <ItemForm singleItem={singleItem} setSingleItem={setSingleItem} />
         )}
         {cart.length > 0 && <button onClick={checkout}>Checkout</button>}
       </div>

@@ -1,12 +1,6 @@
 import React from "react";
-import apiURL from "../api";
 
-export default function Item({ item, setSingleItem, addToCart }) {
-    const singleItemView = async (id) => {
-      const response = await fetch(`${apiURL}/items/${id}`); // Fetch a single item by ID
-      const data = await response.json();
-      setSingleItem(data);
-    }
+export default function Item({ item, singleItemView}) {
     return (
         <div
             onClick={() => singleItemView(item.id)}
@@ -22,15 +16,6 @@ export default function Item({ item, setSingleItem, addToCart }) {
               height="20%"
             />
             <h3 className="price">Price: ${item.price}</h3>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                addToCart(item)
-              }}>
-                Add To Cart
-              </button>
-
           </div>
     )
-    
 }
