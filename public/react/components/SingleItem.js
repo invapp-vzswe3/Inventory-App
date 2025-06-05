@@ -1,25 +1,7 @@
 import React from "react";
 import ItemForm from "./ItemForm";
-import apiURL from "../api";
 
-export default function SingleItem({form, singleItem, refresh, setSingleItem, toggleForm, setRefresh}) {
-  
-
-    const goBackToItems = () => {
-      setSingleItem(null);
-      setRefresh(!refresh); 
-      console.log(refresh);
-    }
-
-    const deleteItem = async (id) => {
-      await fetch(`${apiURL}/items/${id}`, {
-        method: "DELETE",
-      });
-      console.log(`Item with ID ${id} deleted`);
-      setSingleItem(null);
-      setRefresh(!refresh);  
-    }
-  
+export default function SingleItem({form, singleItem, setSingleItem, toggleForm, goBackToItems, deleteItem}) {
     return (
         <div>
                 <h2>{singleItem.name}</h2>
