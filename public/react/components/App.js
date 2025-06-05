@@ -79,6 +79,7 @@ function App() {
           setItems(await response.json());
         }}
       >
+        <h2> Add Item </h2>
         <input name="name" placeholder="Name" /> <br />
         <input name="description" placeholder="Description" /> <br />
         <input name="price" placeholder="Price" /> <br />
