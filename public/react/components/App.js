@@ -32,7 +32,7 @@ function App() {
       const data = await response.json();
       setItems(data);
     };
-    fetchItems();
+    fetchItems();// Fetch the items
   }, [refresh, searchItems]);
 
   const handleSearch = (e) => {
