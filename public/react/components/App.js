@@ -10,7 +10,7 @@ function App() {
   const [singleItem, setSingleItem] = useState(null);
   const [form, toggleForm] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  const [searchItems, setSearchItems] = useState(undefined);
+  const [searchItems, setSearchItems] = useState("");
   const [isAddingProduct, setIsAddingProduct] = useState(false);
 
   useEffect(() => {
