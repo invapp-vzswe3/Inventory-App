@@ -17,11 +17,7 @@ function App() {
 
   // Used to re-fetch data on updates
   const [refresh, setRefresh] = useState(false);
-
-  // Holds the current search string
   const [searchItems, setSearchItems] = useState("");
-
-  // Controls whether the item creation form is shown
   const [isAddingProduct, setIsAddingProduct] = useState(false);
 
   // 🛒 Cart state to store selected items with quantity
