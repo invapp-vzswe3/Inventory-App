@@ -23,7 +23,7 @@ function App() {
       const data = await response.json();
       setItems(data);
     };
-  fetchItems();// Fetch the items
+    fetchItems();// Fetch the items
   }, [refresh, searchItems]);
 
   const handleSearch = (e) => {
