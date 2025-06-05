@@ -1,6 +1,12 @@
 import React from "react";
+import apiURL from "../api";
 
-export default function Item({ item, singleItemView}) {
+export default function Item({ item, setSingleItem }) {
+    const singleItemView = async (id) => {
+      const response = await fetch(`${apiURL}/items/${id}`); // Fetch a single item by ID
+      const data = await response.json();
+      setSingleItem(data);
+    }
     return (
         <div
             onClick={() => singleItemView(item.id)}
