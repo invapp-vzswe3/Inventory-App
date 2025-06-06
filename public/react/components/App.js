@@ -17,7 +17,11 @@ function App() {
 
   // Used to re-fetch data on updates
   const [refresh, setRefresh] = useState(false);
+
+  // Holds the current search string
   const [searchItems, setSearchItems] = useState("");
+
+  // Controls whether the item creation form is shown
   const [isAddingProduct, setIsAddingProduct] = useState(false);
 
   // 🛒 Cart state to store selected items with quantity
@@ -78,6 +82,21 @@ function App() {
   return (
   <>
     <h1 className="title">Inventory App</h1>
+    
+    <div>
+        <h2>🛒 Your Cart</h2>
+        {cart.length === 0 ? (
+          <p>Cart is empty</p>
+        ) : (
+          cart.map((item) => (
+            <div key={item.id}>
+              {item.name} x {item.quantity}
+              <button onClick={() => removeFromCart(item.id)}>Remove</button>
+            </div>
+          ))
+        )}
+        {cart.length > 0 && <button onClick={checkout}>Checkout</button>}
+      </div>
     {isAddingProduct ? (
       <AddingProductForm setIsAddingProduct={setIsAddingProduct} setItems={setItems}/>
     ) : !singleItem ? (
@@ -90,7 +109,7 @@ function App() {
         />
       </div>
         {items.map((item) => (
-          <Item key={item.id} item={item} setSingleItem={setSingleItem}/>
+          <Item key={item.id} item={item} setSingleItem={setSingleItem} addToCart={addToCart}/>
         ))}
         <button onClick={handleCreationClick}>Add Item</button>
       </>
