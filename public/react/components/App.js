@@ -91,11 +91,11 @@ function App() {
           cart.map((item) => (
             <div key={item.id}>
               {item.name} x {item.quantity}
-              <button onClick={() => removeFromCart(item.id)}>Remove</button>
+              <button className="red-button" onClick={() => removeFromCart(item.id)}>Remove</button>
             </div>
           ))
         )}
-        {cart.length > 0 && <button onClick={checkout}>Checkout</button>}
+        {cart.length > 0 && <button className="green-button" onClick={checkout}>Checkout</button>}
       </div>
     {isAddingProduct ? (
       <AddingProductForm setIsAddingProduct={setIsAddingProduct} setItems={setItems}/>
@@ -111,7 +111,7 @@ function App() {
         {items.map((item) => (
           <Item key={item.id} item={item} setSingleItem={setSingleItem} addToCart={addToCart}/>
         ))}
-        <button onClick={handleCreationClick}>Add Item</button>
+        <button className="green-button" onClick={handleCreationClick}>Add Item</button>
       </>
     ) : (
       <SingleItem form={form} singleItem={singleItem} setSingleItem={setSingleItem} refresh={refresh} setRefresh={setRefresh} toggleForm={toggleForm}/>

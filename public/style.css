@@ -50,3 +50,15 @@ img {
   display: flex;
   justify-content: center;
 }
+.green-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: black;
+}
+.red-button {
+  background-color: red;
+  color: white;
+  padding: 5px 10px;
+  border: black;
+}
