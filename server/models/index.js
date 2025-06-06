@@ -6,4 +6,5 @@ module.exports = {
   Item,
   User,
   Order,
+  Cart
 };
