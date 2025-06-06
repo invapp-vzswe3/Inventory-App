@@ -1,14 +1,25 @@
 ![logo](https://user-images.githubusercontent.com/44912347/202296600-c5f247d6-9616-49db-88f0-38433429d781.jpg)
 
-# Inventory App
 
-You are a team of developers for an e-commerce company. The Engineering team is rebuilding their inventory tracking app from the ground up. Your team has been tasked with creating a Full-Sack (front and back end) RESTful CRUD application to track the items.
+# Description of the App
+Our Inventory App provides users with comprehensive inventory management capabilities, including the ability to view, update, and delete specific items, as well as seamlessly add new inventory entries. The application also incorporates an advanced search feature, enabling efficient retrieval of items based on their names to streamline inventory operations.
+
+# Collaborators
+Emmanuel, Bhavik, Kavya, Josh
 
 ## Getting Started
 
 1. `npm install`
 2. `npm run server-dev`
 3. In a seperate terminal, `npm run client-dev`
+
+## Link to deployed deployed version
+https://inventory-app-sokka.onrender.com/
+
+# Inventory App
+
+You are a team of developers for an e-commerce company. The Engineering team is rebuilding their inventory tracking app from the ground up. Your team has been tasked with creating a Full-Sack (front and back end) RESTful CRUD application to track the items.
+
 
 ## Inventory App “Tiers”
 
