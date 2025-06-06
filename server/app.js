@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Serve static files from the frontend build (optional adjustment)
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, "../dist")));
 
 // ========== Routes ========== //
 app.use("/api", require("./routes")); // All API routes under /api
