@@ -32,4 +32,5 @@ export default function Item({ item, setSingleItem, addToCart }) {
 
           </div>
     )
+    
 }
