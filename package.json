@@ -49,12 +49,6 @@
     "vm-browserify": "^1.1.2"
   },
   "jest": {
-    "testEnvironment": "jsdom",
-    "transformIgnorePatterns": [
-      "node_modules/(?!(uuid|sequelize)/)"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.js"
-    ]
+    "testEnvironment": "jsdom"
   }
 }
