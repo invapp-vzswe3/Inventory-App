@@ -26,7 +26,7 @@ router.get('/', async (req, res, next) => {
       where.name = { [Op.like]: `%${req.query.name}%` };
     }
     const items = await Item.findAll({ where: Object.keys(where).length ? where : undefined });
-    res.send(items)
+    res.status(200).send(items)
   } catch (error) {
     next(error)
   }

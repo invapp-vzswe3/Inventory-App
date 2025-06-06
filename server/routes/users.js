@@ -2,18 +2,35 @@ const express = require("express");
 const { User } = require("../models");
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   try {
     const user = await User.create(req.body);
-    res.status(201).json(user);
+    if (!user) {
+      res.status(400).json({ error: `Could not find user`});
+    } else {
+      res.status(201).json(user);
+    }
+
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    next(err);
+
   }
 });
 
-router.get("/", async (req, res) => {
-  const users = await User.findAll();
-  res.json(users);
+router.get("/", async (req, res, next) => {
+  try {
+    const users = await User.findAll();
+    if (!users) {
+      res.status(400).json({ error: `Could not find users`});
+    } else {
+      res.status(200).json(users);
+    }
+
+  } catch(err) {
+    next(err);
+    
+  }
+
 });
 
 module.exports = router;
