@@ -2,7 +2,9 @@
   "name": "inventoryapp",
   "version": "3.0.0",
   "scripts": {
-    "test": "jest",
+    "test:server": "jest --config=jest.server.config.js --runInBand",
+    "test:client": "jest --config=jest.client.config.js --runInBand",
+    "test": "npm run test:server && npm run test:client",
     "client-dev": "parcel public/index.html --open",
     "server-dev": "nodemon server.js",
     "seed": "node server/seed.js",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.27.2",
     "@babel/preset-react": "^7.27.1",
+    "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^13.4.0",
     "assert": "^2.1.0",
     "babel-jest": "^27.5.1",
@@ -43,5 +46,8 @@
     "url": "^0.11.4",
     "util": "^0.12.5",
     "vm-browserify": "^1.1.2"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
   }
 }
