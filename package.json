@@ -2,7 +2,9 @@
   "name": "inventoryapp",
   "version": "3.0.0",
   "scripts": {
-    "test": "jest",
+    "test:server": "jest --config=jest.server.config.js --runInBand",
+    "test:client": "jest --config=jest.client.config.js --runInBand",
+    "test": "npm run test:server && npm run test:client",
     "client-dev": "parcel public/index.html --open",
     "server-dev": "nodemon server.js",
     "seed": "node server/seed.js",
@@ -12,7 +14,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.21.2",
+    "jest": "^29.7.0",
     "morgan": "^1.10.0",
+    "pg-hstore": "^2.3.4",
     "process": "^0.11.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -22,11 +26,28 @@
   "devDependencies": {
     "@babel/preset-env": "^7.27.2",
     "@babel/preset-react": "^7.27.1",
+    "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^13.4.0",
+    "assert": "^2.1.0",
     "babel-jest": "^27.5.1",
-    "jest": "^27.5.1",
+    "browserify-zlib": "^0.2.0",
+    "crypto-browserify": "^3.12.1",
+    "events": "^3.3.0",
     "nodemon": "^3.1.10",
+    "os-browserify": "^0.3.0",
     "parcel": "^2.15.1",
-    "react-test-renderer": "^18.3.1"
+    "path-browserify": "^1.0.1",
+    "prettier": "3.5.3",
+    "querystring-es3": "^0.2.1",
+    "react-test-renderer": "^18.3.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "supertest": "^7.1.1",
+    "url": "^0.11.4",
+    "util": "^0.12.5",
+    "vm-browserify": "^1.1.2"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
   }
 }
